@@ -1,0 +1,2004 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>FRACTALS AGENTS // AI Solutions</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        />
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            :root {
+                --accent: #c4ed38;
+                --accent-dim: rgba(196, 237, 56, 0.1);
+                --accent-glow: rgba(196, 237, 56, 0.4);
+
+                --bg-dark: #0a0a0a;
+                --bg-card: #141414;
+                --bg-card-hover: #1a1a1a;
+                --bg-border: rgba(255, 255, 255, 0.06);
+
+                --text-primary: #ffffff;
+                --text-secondary: rgba(255, 255, 255, 0.5);
+                --text-muted: rgba(255, 255, 255, 0.35);
+
+                --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            html {
+                scroll-behavior: smooth;
+            }
+
+            body {
+                font-family: "Inter", sans-serif;
+                background: var(--bg-dark);
+                color: var(--text-primary);
+                line-height: 1.6;
+                overflow-x: hidden;
+            }
+
+            /* Hero Section - Centered & Minimal */
+            .hero {
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                position: relative;
+                padding: 40px;
+                overflow: hidden;
+            }
+
+            .hero-bg {
+                position: absolute;
+                inset: 0;
+                overflow: hidden;
+            }
+
+            .hero-grid {
+                position: absolute;
+                inset: 0;
+                background-image:
+                    linear-gradient(var(--bg-border) 1px, transparent 1px),
+                    linear-gradient(
+                        90deg,
+                        var(--bg-border) 1px,
+                        transparent 1px
+                    );
+                background-size: 60px 60px;
+                opacity: 0.3;
+                animation: gridMove 20s linear infinite;
+            }
+
+            @keyframes gridMove {
+                0% {
+                    transform: translate(0, 0);
+                }
+                100% {
+                    transform: translate(60px, 60px);
+                }
+            }
+
+            .hero-glow {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 600px;
+                height: 600px;
+                background: radial-gradient(
+                    circle,
+                    var(--accent-dim) 0%,
+                    transparent 70%
+                );
+                animation: pulse 4s ease-in-out infinite;
+            }
+
+            @keyframes pulse {
+                0%,
+                100% {
+                    opacity: 0.5;
+                    transform: translate(-50%, -50%) scale(1);
+                }
+                50% {
+                    opacity: 1;
+                    transform: translate(-50%, -50%) scale(1.1);
+                }
+            }
+
+            .hero-content {
+                position: relative;
+                z-index: 1;
+                max-width: 700px;
+            }
+
+            .hero-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 10px;
+                padding: 10px 24px;
+                border: 1px solid var(--accent);
+                font-size: 12px;
+                font-weight: 500;
+                letter-spacing: 2px;
+                text-transform: uppercase;
+                color: var(--accent);
+                margin-bottom: 40px;
+                background: rgba(196, 237, 56, 0.03);
+            }
+
+            .hero-badge i {
+                font-size: 14px;
+            }
+
+            .hero-title {
+                font-size: clamp(2.5rem, 6vw, 4.5rem);
+                font-weight: 700;
+                line-height: 1.1;
+                margin-bottom: 24px;
+                letter-spacing: -0.02em;
+            }
+
+            .hero-title .highlight {
+                color: var(--accent);
+            }
+
+            .hero-subtitle {
+                font-size: 18px;
+                color: var(--text-secondary);
+                max-width: 550px;
+                margin: 0 auto 40px;
+                line-height: 1.8;
+            }
+
+            .hero-cta {
+                display: inline-flex;
+                align-items: center;
+                gap: 12px;
+                padding: 18px 40px;
+                background: var(--accent);
+                color: #1a1a1a;
+                font-size: 14px;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                text-decoration: none;
+                transition: var(--transition);
+            }
+
+            .hero-cta:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 20px 40px var(--accent-glow);
+            }
+
+            .hero-cta i {
+                transition: var(--transition);
+            }
+
+            .hero-cta:hover i {
+                transform: translateX(5px);
+            }
+
+            /* Navigation */
+            .nav {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 100;
+                padding: 24px 40px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                background: linear-gradient(
+                    to bottom,
+                    rgba(10, 10, 10, 0.9),
+                    transparent
+                );
+            }
+
+            .nav-logo {
+                font-size: 16px;
+                font-weight: 700;
+                letter-spacing: 2px;
+                color: var(--text-primary);
+            }
+
+            .nav-logo span {
+                color: var(--accent);
+            }
+
+            .nav-links {
+                display: flex;
+                gap: 32px;
+            }
+
+            .nav-link {
+                font-size: 13px;
+                color: var(--text-secondary);
+                text-decoration: none;
+                transition: var(--transition);
+            }
+
+            .nav-link:hover {
+                color: var(--accent);
+            }
+
+            /* Section Styles */
+            section {
+                padding: 120px 40px;
+            }
+
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+
+            /* Problem Section - Minimal Cards */
+            .section-label {
+                display: inline-block;
+                font-size: 11px;
+                font-weight: 600;
+                letter-spacing: 3px;
+                text-transform: uppercase;
+                color: var(--accent);
+                margin-bottom: 16px;
+                padding: 8px 16px;
+                border: 1px solid var(--accent-dim);
+            }
+
+            .section-title {
+                font-size: clamp(2rem, 4vw, 3rem);
+                font-weight: 600;
+                margin-bottom: 16px;
+                line-height: 1.2;
+            }
+
+            .section-subtitle {
+                font-size: 16px;
+                color: var(--text-secondary);
+                max-width: 700px;
+                margin-bottom: 60px;
+                line-height: 1.7;
+            }
+
+            .problem-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 24px;
+            }
+
+            .problem-card {
+                padding: 32px;
+                background: var(--bg-card);
+                border: 1px solid var(--bg-border);
+                transition: var(--transition);
+            }
+
+            .problem-card:hover {
+                background: var(--bg-card-hover);
+                border-color: rgba(196, 237, 56, 0.2);
+                transform: translateY(-4px);
+            }
+
+            .problem-number {
+                font-size: 14px;
+                font-weight: 600;
+                color: var(--accent);
+                margin-bottom: 16px;
+                font-family: monospace;
+            }
+
+            .problem-card h3 {
+                font-size: 18px;
+                font-weight: 600;
+                margin-bottom: 12px;
+            }
+
+            .problem-card p {
+                font-size: 14px;
+                color: var(--text-secondary);
+                line-height: 1.6;
+            }
+
+            /* Capabilities - Quick List */
+            .capabilities-section {
+                background: var(--bg-card);
+            }
+
+            .capabilities-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 24px;
+            }
+
+            .capability-card {
+                padding: 28px;
+                background: var(--bg-dark);
+                border: 1px solid var(--bg-border);
+                transition: var(--transition);
+            }
+
+            .capability-card:hover {
+                border-color: var(--accent);
+            }
+
+            .capability-icon {
+                width: 48px;
+                height: 48px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 20px;
+                font-size: 20px;
+                color: var(--accent);
+                background: var(--accent-dim);
+            }
+
+            .capability-card h3 {
+                font-size: 16px;
+                font-weight: 600;
+                margin-bottom: 10px;
+            }
+
+            .capability-card ul {
+                list-style: none;
+            }
+
+            .capability-card li {
+                font-size: 13px;
+                color: var(--text-secondary);
+                padding: 6px 0;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .capability-card li::before {
+                content: "";
+                width: 4px;
+                height: 4px;
+                background: var(--accent);
+            }
+
+            /* Process - Simple Steps */
+            .process-timeline {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 24px;
+                margin-top: 40px;
+            }
+
+            .process-step {
+                text-align: center;
+                padding: 32px 24px;
+                background: var(--bg-card);
+                border: 1px solid var(--bg-border);
+                transition: var(--transition);
+            }
+
+            .process-step:hover {
+                border-color: var(--accent);
+            }
+
+            .step-number {
+                width: 48px;
+                height: 48px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto 20px;
+                font-size: 14px;
+                font-weight: 700;
+                color: var(--accent);
+                background: var(--accent-dim);
+            }
+
+            .process-step h3 {
+                font-size: 16px;
+                font-weight: 600;
+                margin-bottom: 10px;
+            }
+
+            .process-step p {
+                font-size: 13px;
+                color: var(--text-secondary);
+            }
+
+            /* CTA Section */
+            .cta-section {
+                text-align: center;
+                padding: 160px 40px;
+                position: relative;
+            }
+
+            .cta-bg {
+                position: absolute;
+                inset: 0;
+                background: radial-gradient(
+                    ellipse at center,
+                    var(--accent-dim) 0%,
+                    transparent 70%
+                );
+            }
+
+            .cta-content {
+                position: relative;
+                z-index: 1;
+            }
+
+            .cta-title {
+                font-size: clamp(2rem, 5vw, 4rem);
+                font-weight: 700;
+                margin-bottom: 24px;
+                line-height: 1.1;
+            }
+
+            .cta-title span {
+                color: var(--accent);
+            }
+
+            .cta-text {
+                font-size: 18px;
+                color: var(--text-secondary);
+                max-width: 600px;
+                margin: 0 auto 40px;
+            }
+
+            /* Footer */
+            footer {
+                padding: 40px;
+                border-top: 1px solid var(--bg-border);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .footer-logo {
+                font-size: 14px;
+                font-weight: 600;
+                letter-spacing: 1px;
+            }
+
+            .footer-logo span {
+                color: var(--accent);
+            }
+
+            .footer-links {
+                display: flex;
+                gap: 24px;
+            }
+
+            .footer-link {
+                font-size: 13px;
+                color: var(--text-secondary);
+                text-decoration: none;
+                transition: var(--transition);
+            }
+
+            .footer-link:hover {
+                color: var(--accent);
+            }
+
+            /* Animations */
+            .fade-up {
+                opacity: 0;
+                transform: translateY(30px);
+                transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            .fade-up.active {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .delay-1 {
+                transition-delay: 0.1s;
+            }
+            .delay-2 {
+                transition-delay: 0.2s;
+            }
+            .delay-3 {
+                transition-delay: 0.3s;
+            }
+            .delay-4 {
+                transition-delay: 0.4s;
+            }
+
+            /* Case Study Metrics */
+            .case-metric {
+                display: flex;
+                align-items: baseline;
+                gap: 8px;
+                padding-top: 16px;
+                border-top: 1px solid var(--bg-border);
+            }
+
+            .metric-value {
+                font-size: 28px;
+                font-weight: 700;
+                color: var(--accent);
+            }
+
+            .metric-label {
+                font-size: 12px;
+                color: var(--text-muted);
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            /* Quotes Section */
+            .quotes-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 24px;
+            }
+
+            .quote-card {
+                padding: 32px;
+                background: var(--bg-card);
+                border: 1px solid var(--bg-border);
+                transition: var(--transition);
+            }
+
+            .quote-card:hover {
+                border-color: rgba(196, 237, 56, 0.2);
+            }
+
+            .quote-icon {
+                font-size: 24px;
+                color: var(--accent);
+                margin-bottom: 20px;
+                opacity: 0.5;
+            }
+
+            .quote-card blockquote {
+                font-size: 16px;
+                font-style: italic;
+                color: var(--text-secondary);
+                line-height: 1.7;
+                margin-bottom: 24px;
+            }
+
+            .quote-author {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+            }
+
+            .author-avatar {
+                width: 48px;
+                height: 48px;
+                background: var(--accent-dim);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 18px;
+                color: var(--accent);
+            }
+
+            .author-info {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .author-name {
+                font-size: 14px;
+                font-weight: 600;
+                color: var(--text-primary);
+            }
+
+            .author-title {
+                font-size: 12px;
+                color: var(--text-muted);
+            }
+
+            /* Source References */
+            .source-link {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                font-size: 11px;
+                color: var(--text-muted);
+                text-decoration: none;
+                margin-top: 12px;
+                padding: 6px 12px;
+                background: rgba(255, 255, 255, 0.02);
+                border: 1px solid var(--bg-border);
+                transition: var(--transition);
+            }
+
+            .source-link:hover {
+                color: var(--accent);
+                border-color: rgba(196, 237, 56, 0.2);
+            }
+
+            .source-link i {
+                font-size: 10px;
+            }
+
+            .section-source {
+                font-size: 12px;
+                color: var(--text-muted);
+                margin-top: 16px;
+                padding-top: 16px;
+                border-top: 1px solid var(--bg-border);
+            }
+
+            .section-source a {
+                color: var(--accent);
+                text-decoration: none;
+            }
+
+            .section-source a:hover {
+                text-decoration: underline;
+            }
+
+            /* Use Cases Section - Same as problem section styling */
+            #usecases {
+                background: var(--bg-dark);
+            }
+
+            #usecases .section-label {
+                background: var(--accent-dim);
+            }
+
+            /* Case Studies Section */
+            #casestudies {
+                padding-bottom: 100px;
+            }
+
+            #casestudies .section-label {
+                background: var(--accent-dim);
+            }
+
+            /* Quotes Section */
+            #quotes {
+                background: var(--bg-card);
+                padding-bottom: 120px;
+            }
+
+            #quotes .section-label {
+                background: var(--accent-dim);
+                margin-bottom: 24px;
+            }
+
+            /* ========== RESPONSIVE DESIGN ========== */
+
+            /* Large Tablets (up to 1200px) */
+            @media (max-width: 1200px) {
+                .hero-title {
+                    font-size: clamp(2rem, 5vw, 3.5rem);
+                }
+
+                .hero-glow {
+                    width: 500px;
+                    height: 500px;
+                }
+
+                .section-title {
+                    font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+                }
+            }
+
+            /* Tablets (up to 1024px) */
+            @media (max-width: 1024px) {
+                section {
+                    padding: 100px 32px;
+                }
+
+                .capabilities-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+
+                .process-timeline {
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 20px;
+                }
+
+                .quotes-grid {
+                    grid-template-columns: 1fr;
+                }
+
+                .hero-content {
+                    max-width: 600px;
+                }
+
+                .problem-grid {
+                    gap: 20px;
+                }
+
+                .problem-card,
+                .capability-card,
+                .process-step {
+                    padding: 24px;
+                }
+            }
+
+            /* Large Phones (up to 900px) */
+            @media (max-width: 900px) {
+                .nav {
+                    padding: 16px 24px;
+                }
+
+                .nav-links {
+                    display: none;
+                }
+
+                section {
+                    padding: 80px 24px;
+                }
+
+                .container {
+                    max-width: 100%;
+                }
+
+                .hero {
+                    padding: 60px 24px;
+                }
+
+                .hero-badge {
+                    padding: 8px 20px;
+                    font-size: 11px;
+                }
+
+                .hero-title {
+                    font-size: clamp(1.8rem, 5vw, 3rem);
+                }
+
+                .hero-subtitle {
+                    font-size: 16px;
+                }
+
+                .hero-glow {
+                    width: 400px;
+                    height: 400px;
+                }
+
+                .section-label {
+                    font-size: 10px;
+                    padding: 6px 14px;
+                }
+
+                .section-title {
+                    font-size: clamp(1.5rem, 4vw, 2.2rem);
+                }
+
+                .section-subtitle {
+                    font-size: 15px;
+                }
+
+                .problem-grid,
+                .capabilities-grid {
+                    grid-template-columns: 1fr;
+                }
+
+                .process-timeline {
+                    grid-template-columns: 1fr;
+                }
+
+                .quotes-grid {
+                    grid-template-columns: 1fr;
+                }
+
+                .cta-section {
+                    padding: 120px 24px;
+                }
+
+                .cta-title {
+                    font-size: clamp(1.8rem, 4vw, 3rem);
+                }
+
+                .cta-text {
+                    font-size: 16px;
+                }
+            }
+
+            /* Medium Phones (up to 768px) */
+            @media (max-width: 768px) {
+                .nav {
+                    padding: 14px 20px;
+                }
+
+                .nav-logo {
+                    font-size: 14px;
+                }
+
+                section {
+                    padding: 70px 20px;
+                }
+
+                .hero {
+                    padding: 40px 20px;
+                    min-height: auto;
+                    min-height: 100vh;
+                }
+
+                .hero-badge {
+                    padding: 8px 16px;
+                    font-size: 10px;
+                    margin-bottom: 30px;
+                }
+
+                .hero-title {
+                    font-size: clamp(1.6rem, 5vw, 2.5rem);
+                    margin-bottom: 20px;
+                }
+
+                .hero-subtitle {
+                    font-size: 15px;
+                    margin-bottom: 30px;
+                }
+
+                .hero-cta {
+                    padding: 14px 28px;
+                    font-size: 13px;
+                }
+
+                .hero-glow {
+                    width: 300px;
+                    height: 300px;
+                }
+
+                .hero-grid {
+                    background-size: 40px 40px;
+                }
+
+                .section-header {
+                    margin-bottom: 40px;
+                }
+
+                .section-label {
+                    font-size: 10px;
+                    letter-spacing: 2px;
+                }
+
+                .section-title {
+                    font-size: clamp(1.4rem, 4vw, 2rem);
+                    margin-bottom: 12px;
+                }
+
+                .section-subtitle {
+                    font-size: 14px;
+                    margin-bottom: 40px;
+                }
+
+                .problem-card {
+                    padding: 24px;
+                }
+
+                .problem-number {
+                    font-size: 12px;
+                    margin-bottom: 12px;
+                }
+
+                .problem-card h3 {
+                    font-size: 16px;
+                }
+
+                .problem-card p {
+                    font-size: 13px;
+                }
+
+                .capability-card {
+                    padding: 24px;
+                }
+
+                .capability-icon {
+                    width: 44px;
+                    height: 44px;
+                    font-size: 18px;
+                    margin-bottom: 16px;
+                }
+
+                .capability-card h3 {
+                    font-size: 15px;
+                }
+
+                .capability-card li {
+                    font-size: 12px;
+                }
+
+                .process-step {
+                    padding: 24px 20px;
+                }
+
+                .step-number {
+                    width: 44px;
+                    height: 44px;
+                    font-size: 12px;
+                }
+
+                .process-step h3 {
+                    font-size: 15px;
+                }
+
+                .process-step p {
+                    font-size: 12px;
+                }
+
+                .quote-card {
+                    padding: 24px;
+                }
+
+                .quote-icon {
+                    font-size: 20px;
+                    margin-bottom: 16px;
+                }
+
+                .quote-card blockquote {
+                    font-size: 14px;
+                }
+
+                .quote-author {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 12px;
+                }
+
+                .author-name {
+                    font-size: 13px;
+                }
+
+                .author-title {
+                    font-size: 11px;
+                }
+
+                .case-metric {
+                    flex-direction: column;
+                    gap: 4px;
+                    padding-top: 12px;
+                }
+
+                .metric-value {
+                    font-size: 24px;
+                }
+
+                .metric-label {
+                    font-size: 11px;
+                }
+
+                .source-link {
+                    font-size: 10px;
+                    padding: 4px 10px;
+                }
+
+                .cta-section {
+                    padding: 100px 20px;
+                }
+
+                .cta-title {
+                    font-size: clamp(1.5rem, 5vw, 2.5rem);
+                }
+
+                .cta-text {
+                    font-size: 15px;
+                    margin-bottom: 30px;
+                }
+
+                .hero-cta {
+                    width: 100%;
+                    max-width: 300px;
+                    justify-content: center;
+                }
+
+                footer {
+                    padding: 30px 20px;
+                    flex-direction: column;
+                    gap: 16px;
+                    text-align: center;
+                }
+
+                .footer-logo {
+                    font-size: 13px;
+                }
+
+                .footer-links {
+                    gap: 20px;
+                }
+
+                .footer-link {
+                    font-size: 12px;
+                }
+
+                .section-source {
+                    font-size: 11px;
+                    margin-top: 24px;
+                    padding-top: 16px;
+                }
+            }
+
+            /* Small Phones (up to 480px) */
+            @media (max-width: 480px) {
+                .nav {
+                    padding: 12px 16px;
+                }
+
+                .nav-logo {
+                    font-size: 13px;
+                    letter-spacing: 1px;
+                }
+
+                section {
+                    padding: 60px 16px;
+                }
+
+                .hero {
+                    padding: 30px 16px;
+                }
+
+                .hero-badge {
+                    padding: 6px 14px;
+                    font-size: 9px;
+                    letter-spacing: 1px;
+                }
+
+                .hero-badge i {
+                    font-size: 12px;
+                }
+
+                .hero-title {
+                    font-size: clamp(1.4rem, 6vw, 2rem);
+                    line-height: 1.2;
+                }
+
+                .hero-subtitle {
+                    font-size: 14px;
+                    line-height: 1.6;
+                }
+
+                .hero-cta {
+                    padding: 12px 24px;
+                    font-size: 12px;
+                }
+
+                .hero-glow {
+                    width: 250px;
+                    height: 250px;
+                }
+
+                .hero-grid {
+                    background-size: 30px 30px;
+                }
+
+                .section-label {
+                    font-size: 9px;
+                    padding: 6px 12px;
+                    letter-spacing: 1px;
+                }
+
+                .section-title {
+                    font-size: clamp(1.3rem, 5vw, 1.8rem);
+                }
+
+                .section-subtitle {
+                    font-size: 13px;
+                }
+
+                .problem-card {
+                    padding: 20px;
+                }
+
+                .problem-number {
+                    font-size: 11px;
+                }
+
+                .problem-card h3 {
+                    font-size: 15px;
+                }
+
+                .problem-card p {
+                    font-size: 12px;
+                }
+
+                .capability-card {
+                    padding: 20px;
+                }
+
+                .capability-icon {
+                    width: 40px;
+                    height: 40px;
+                    font-size: 16px;
+                }
+
+                .capability-card h3 {
+                    font-size: 14px;
+                }
+
+                .capability-card li {
+                    font-size: 11px;
+                    padding: 5px 0;
+                }
+
+                .process-step {
+                    padding: 20px 16px;
+                }
+
+                .step-number {
+                    width: 40px;
+                    height: 40px;
+                    font-size: 11px;
+                    margin-bottom: 16px;
+                }
+
+                .process-step h3 {
+                    font-size: 14px;
+                }
+
+                .process-step p {
+                    font-size: 11px;
+                }
+
+                .quote-card {
+                    padding: 20px;
+                }
+
+                .quote-icon {
+                    font-size: 18px;
+                }
+
+                .quote-card blockquote {
+                    font-size: 13px;
+                    margin-bottom: 20px;
+                }
+
+                .author-avatar {
+                    width: 40px;
+                    height: 40px;
+                    font-size: 14px;
+                }
+
+                .author-name {
+                    font-size: 12px;
+                }
+
+                .author-title {
+                    font-size: 10px;
+                }
+
+                .metric-value {
+                    font-size: 22px;
+                }
+
+                .metric-label {
+                    font-size: 10px;
+                }
+
+                .source-link {
+                    font-size: 9px;
+                    padding: 4px 8px;
+                }
+
+                .cta-section {
+                    padding: 80px 16px;
+                }
+
+                .cta-title {
+                    font-size: clamp(1.3rem, 5vw, 2rem);
+                }
+
+                .cta-text {
+                    font-size: 14px;
+                }
+
+                .hero-cta {
+                    width: 100%;
+                    max-width: 280px;
+                    padding: 12px 20px;
+                }
+
+                footer {
+                    padding: 24px 16px;
+                }
+
+                .footer-logo {
+                    font-size: 12px;
+                }
+
+                .footer-links {
+                    gap: 16px;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                }
+
+                .footer-link {
+                    font-size: 11px;
+                }
+
+                .section-source {
+                    font-size: 10px;
+                }
+
+                .fade-up {
+                    transform: translateY(20px);
+                }
+            }
+
+            /* Landscape Orientation on Mobile */
+            @media (max-width: 900px) and (orientation: landscape) {
+                .hero {
+                    padding: 40px 24px;
+                    min-height: auto;
+                }
+
+                section {
+                    padding: 60px 24px;
+                }
+
+                .hero-title {
+                    font-size: clamp(1.5rem, 4vw, 2.2rem);
+                }
+
+                .section-title {
+                    font-size: clamp(1.3rem, 3vw, 1.8rem);
+                }
+            }
+
+            /* High DPI / Retina Displays */
+            @media (-webkit-min-device-pixel-ratio: 2),
+                (min-resolution: 192dpi) {
+                .hero-grid {
+                    opacity: 0.2;
+                }
+            }
+
+            /* Reduced Motion for Accessibility */
+            @media (prefers-reduced-motion: reduce) {
+                * {
+                    animation-duration: 0.01ms !important;
+                    animation-iteration-count: 1 !important;
+                    transition-duration: 0.01ms !important;
+                }
+
+                .hero-grid {
+                    animation: none;
+                }
+
+                .hero-glow {
+                    animation: none;
+                }
+
+                .fade-up {
+                    transform: none;
+                    opacity: 1;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Navigation -->
+        <nav class="nav">
+            <div class="nav-logo">FRACTALS <span>AGENTS</span></div>
+            <div class="nav-links">
+                <a href="#problem" class="nav-link">Problem</a>
+                <a href="#usecases" class="nav-link">Use Cases</a>
+                <a href="#casestudies" class="nav-link">Case Studies</a>
+                <a href="#quotes" class="nav-link">Insights</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-bg">
+                <div class="hero-grid"></div>
+                <div class="hero-glow"></div>
+            </div>
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fa-solid fa-bolt"></i>
+                    Microsoft Copilot Studio
+                </div>
+                <h1 class="hero-title">
+                    Autonomous <span class="highlight">AI Agents</span><br />
+                    For Enterprise Scale
+                </h1>
+                <p class="hero-subtitle">
+                    Custom-built AI agents that navigate your entire project
+                    ecosystem. Connect every tool, unlock every document,
+                    automate every process. Plug-and-play deployment in just one
+                    month.
+                </p>
+                <a
+                    href="/cdn-cgi/l/email-protection#512523303a3828223a38113723303225303d227c223e3d2425383e3f227f323e3c"
+                    class="hero-cta"
+                >
+                    Let's Connect <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        </section>
+
+        <!-- Problem Section -->
+        <section id="problem">
+            <div class="container">
+                <div class="fade-up">
+                    <div class="section-label">The Problem</div>
+                    <h2 class="section-title">Productivity Leaks</h2>
+                    <p class="section-subtitle">
+                        Modern enterprises are losing 20+ hours every week to
+                        inefficiencies that seem invisible until you look
+                        closely. Information scattered across SharePoint, Teams,
+                        email, and local drives creates chaos. New team members
+                        waste weeks learning project structures instead of
+                        contributing. Context switching between JIRA, Outlook,
+                        Excel, and a dozen other tools destroys focus. Status
+                        reports and manual updates consume time that should go
+                        to actual delivery.
+                    </p>
+                </div>
+
+                <div class="problem-grid">
+                    <div class="problem-card fade-up delay-1">
+                        <span class="problem-number">// 01</span>
+                        <h3>Information Fragmentation</h3>
+                        <p>
+                            Documents scattered across SharePoint, Teams, and
+                            local drives. Finding the right file takes longer
+                            than the work itself.
+                        </p>
+                    </div>
+
+                    <div class="problem-card fade-up delay-2">
+                        <span class="problem-number">// 02</span>
+                        <h3>Onboarding Friction</h3>
+                        <p>
+                            New hires spend weeks learning project structures
+                            instead of contributing value from day one.
+                        </p>
+                    </div>
+
+                    <div class="problem-card fade-up delay-3">
+                        <span class="problem-number">// 03</span>
+                        <h3>Context Switching</h3>
+                        <p>
+                            Constantly jumping between tools kills focus and
+                            destroys productivity momentum.
+                        </p>
+                    </div>
+
+                    <div class="problem-card fade-up delay-4">
+                        <span class="problem-number">// 04</span>
+                        <h3>Manual Overhead</h3>
+                        <p>
+                            Reporting, updates, and status checks consume hours
+                            that should go to actual delivery.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Capabilities Section -->
+        <section id="capabilities" class="capabilities-section">
+            <div class="container">
+                <div class="fade-up">
+                    <div class="section-label">What We Build</div>
+                    <h2 class="section-title">Enterprise AI Capabilities</h2>
+                </div>
+
+                <div class="capabilities-grid">
+                    <div class="capability-card fade-up delay-1">
+                        <div class="capability-icon">
+                            <i class="fa-solid fa-brain"></i>
+                        </div>
+                        <h3>Document Intelligence</h3>
+                        <ul>
+                            <li>Multi-format analysis</li>
+                            <li>Automated synthesis</li>
+                            <li>Knowledge retrieval</li>
+                        </ul>
+                    </div>
+
+                    <div class="capability-card fade-up delay-2">
+                        <div class="capability-icon">
+                            <i class="fa-solid fa-network-wired"></i>
+                        </div>
+                        <h3>System Integration</h3>
+                        <ul>
+                            <li>Microsoft ecosystem</li>
+                            <li>Third-party tools</li>
+                            <li>Custom APIs</li>
+                        </ul>
+                    </div>
+
+                    <div class="capability-card fade-up delay-3">
+                        <div class="capability-icon">
+                            <i class="fa-solid fa-comments"></i>
+                        </div>
+                        <h3>Conversational AI</h3>
+                        <ul>
+                            <li>Natural language queries</li>
+                            <li>Contextual responses</li>
+                            <li>Teams integration</li>
+                        </ul>
+                    </div>
+
+                    <div class="capability-card fade-up delay-4">
+                        <div class="capability-icon">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <h3>Analytics & Reporting</h3>
+                        <ul>
+                            <li>Automated insights</li>
+                            <li>Progress tracking</li>
+                            <li>Trend analysis</li>
+                        </ul>
+                    </div>
+
+                    <div class="capability-card fade-up delay-4">
+                        <div class="capability-icon">
+                            <i class="fa-solid fa-bolt"></i>
+                        </div>
+                        <h3>Workflow Automation</h3>
+                        <ul>
+                            <li>Task management</li>
+                            <li>Notification systems</li>
+                            <li>Schedule coordination</li>
+                        </ul>
+                    </div>
+
+                    <div class="capability-card fade-up delay-4">
+                        <div class="capability-icon">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <h3>Security & Compliance</h3>
+                        <ul>
+                            <li>Enterprise security</li>
+                            <li>Access controls</li>
+                            <li>Audit trails</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Process Section -->
+        <section id="process">
+            <div class="container">
+                <div class="fade-up">
+                    <div class="section-label">How It Works</div>
+                    <h2 class="section-title">From Idea to Deployment</h2>
+                    <p class="section-subtitle">
+                        A streamlined one-month process that transforms how your
+                        enterprise operates.
+                    </p>
+                </div>
+
+                <div class="process-timeline">
+                    <div class="process-step fade-up delay-1">
+                        <div class="step-number">01</div>
+                        <h3>Discovery</h3>
+                        <p>Analyze your environment and define requirements</p>
+                    </div>
+
+                    <div class="process-step fade-up delay-2">
+                        <div class="step-number">02</div>
+                        <h3>Build</h3>
+                        <p>Custom agent development in Copilot Studio</p>
+                    </div>
+
+                    <div class="process-step fade-up delay-3">
+                        <div class="step-number">03</div>
+                        <h3>Refine</h3>
+                        <p>Iterative improvements based on feedback</p>
+                    </div>
+
+                    <div class="process-step fade-up delay-4">
+                        <div class="step-number">04</div>
+                        <h3>Launch</h3>
+                        <p>Team training and full deployment</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Logistics Industry Use Cases Section -->
+        <section id="usecases">
+            <div class="container">
+                <div class="fade-up">
+                    <div class="section-label">Industry Focus</div>
+                    <h2 class="section-title">
+                        AI in Logistics & Supply Chain
+                    </h2>
+                    <p class="section-subtitle">
+                        The logistics industry handles millions of data points
+                        daily. From tender management to freight auditing, AI
+                        agents are transforming how 4PL providers operate.
+                        Leading companies report 10-20% efficiency gains within
+                        months of implementation.
+                    </p>
+                </div>
+
+                <div class="problem-grid">
+                    <div class="problem-card fade-up delay-1">
+                        <span class="problem-number">// USE CASE 01</span>
+                        <h3>Freight Invoice Auditing</h3>
+                        <p>
+                            AI agents automatically verify freight invoices
+                            against contracts, spot billing discrepancies, and
+                            flag exceptions. Companies report recovering 2-5% of
+                            annual freight spend through automated auditing.
+                        </p>
+                    </div>
+
+                    <div class="problem-card fade-up delay-2">
+                        <span class="problem-number">// USE CASE 02</span>
+                        <h3>Tender Management</h3>
+                        <p>
+                            Automate carrier qualification, compare rates across
+                            routes, and generate tender analysis reports. What
+                            took weeks now happens in hours with comprehensive
+                            market comparisons.
+                        </p>
+                    </div>
+
+                    <div class="problem-card fade-up delay-3">
+                        <span class="problem-number">// USE CASE 03</span>
+                        <h3>Control Tower Intelligence</h3>
+                        <p>
+                            Real-time shipment tracking across multiple
+                            carriers. AI predicts delays before they happen and
+                            suggests alternative routing based on live data from
+                            200+ operating platforms.
+                        </p>
+                    </div>
+
+                    <div class="problem-card fade-up delay-4">
+                        <span class="problem-number">// USE CASE 04</span>
+                        <h3>Customs & Compliance</h3>
+                        <p>
+                            Automated HS code classification, duty calculations,
+                            and documentation preparation. Reduce customs
+                            clearance time by 40% while minimizing compliance
+                            risks.
+                        </p>
+                    </div>
+                </div>
+                <p
+                    class="section-source"
+                    style="text-align: center; margin-top: 40px"
+                >
+                    Sources:
+                    <a
+                        href="https://www.mckinsey.com/capabilities/operations/our-insights/digital-logistics-technology-race-gathers-momentum"
+                        target="_blank"
+                        >McKinsey</a
+                    >,
+                    <a
+                        href="https://www.spglobal.com/market-intelligence/en/news-insights/research/logistics-sector-prioritizes-digital-transformation-but-needs-technology-leadership-skills"
+                        target="_blank"
+                        >S&P Global</a
+                    >
+                </p>
+            </div>
+        </section>
+
+        <!-- Case Studies Section -->
+        <section id="casestudies" class="capabilities-section">
+            <div class="container">
+                <div class="fade-up">
+                    <div class="section-label">Case Studies</div>
+                    <h2 class="section-title">Real Results, Global Scale</h2>
+                    <p class="section-subtitle">
+                        Industry leaders implementing AI agents across their
+                        logistics operations.
+                    </p>
+                </div>
+
+                <div class="capabilities-grid">
+                    <div class="capability-card fade-up delay-1">
+                        <div class="capability-icon">
+                            <i class="fa-solid fa-truck-fast"></i>
+                        </div>
+                        <h3>C.H. Robinson</h3>
+                        <p
+                            style="
+                                color: var(--text-secondary);
+                                margin-bottom: 16px;
+                                font-size: 14px;
+                                line-height: 1.6;
+                            "
+                        >
+                            One of the world's largest logistics platforms
+                            deployed generative AI agents performing over 3
+                            million shipping tasks annually. Result: significant
+                            reduction in manual processing time and improved
+                            quote accuracy.
+                        </p>
+                        <div class="case-metric">
+                            <span class="metric-value">3M+</span>
+                            <span class="metric-label"
+                                >Shipping Tasks Automated</span
+                            >
+                        </div>
+                        <a
+                            href="https://www.chrobinson.com/en-us/about-us/newsroom/press-releases/2025/ai-performs-over-three-million-shipping-tasks/"
+                            target="_blank"
+                            class="source-link"
+                        >
+                            <i class="fa-solid fa-external-link-alt"></i>
+                            Source: C.H. Robinson
+                        </a>
+                    </div>
+
+                    <div class="capability-card fade-up delay-2">
+                        <div class="capability-icon">
+                            <i class="fa-solid fa-box-open"></i>
+                        </div>
+                        <h3>Global Freight Forwarder</h3>
+                        <p
+                            style="
+                                color: var(--text-secondary);
+                                margin-bottom: 16px;
+                                font-size: 14px;
+                                line-height: 1.6;
+                            "
+                        >
+                            A leading freight forwarding company integrated AI
+                            for customer communication and documentation.
+                            Achieved 30% reduction in operating costs and 35%
+                            improvement in inventory management efficiency.
+                        </p>
+                        <div class="case-metric">
+                            <span class="metric-value">30%</span>
+                            <span class="metric-label">Cost Reduction</span>
+                        </div>
+                        <a
+                            href="https://www.newage-global.com/blog/ai-assisted-freight-forwarding-bpo-strategic-use-cases"
+                            target="_blank"
+                            class="source-link"
+                        >
+                            <i class="fa-solid fa-external-link-alt"></i>
+                            Source: NewAge Global
+                        </a>
+                    </div>
+
+                    <div class="capability-card fade-up delay-3">
+                        <div class="capability-icon">
+                            <i class="fa-solid fa-warehouse"></i>
+                        </div>
+                        <h3>European 4PL Provider</h3>
+                        <p
+                            style="
+                                color: var(--text-secondary);
+                                margin-bottom: 16px;
+                                font-size: 14px;
+                                line-height: 1.6;
+                            "
+                        >
+                            Implemented AI-powered control tower for multi-modal
+                            transport management across 12 countries. Reduced
+                            shipment exception handling time by 60% and improved
+                            on-time delivery metrics.
+                        </p>
+                        <div class="case-metric">
+                            <span class="metric-value">60%</span>
+                            <span class="metric-label"
+                                >Faster Exception Handling</span
+                            >
+                        </div>
+                        <a
+                            href="https://www.sphereinc.com/blogs/ai-in-logistics-and-transportation/"
+                            target="_blank"
+                            class="source-link"
+                        >
+                            <i class="fa-solid fa-external-link-alt"></i>
+                            Source: Sphere Partners
+                        </a>
+                    </div>
+
+                    <div class="capability-card fade-up delay-4">
+                        <div class="capability-icon">
+                            <i class="fa-solid fa-globe"></i>
+                        </div>
+                        <h3>E-Commerce Distributor</h3>
+                        <p
+                            style="
+                                color: var(--text-secondary);
+                                margin-bottom: 16px;
+                                font-size: 14px;
+                                line-height: 1.6;
+                            "
+                        >
+                            Deployed AI agents for automated rate comparisons
+                            and carrier selection across 50+ carriers. Reduced
+                            tender analysis time from 2 weeks to 2 days while
+                            improving carrier mix optimization.
+                        </p>
+                        <div class="case-metric">
+                            <span class="metric-value">90%</span>
+                            <span class="metric-label"
+                                >Faster Tender Analysis</span
+                            >
+                        </div>
+                        <a
+                            href="https://www.freightamigo.com/en/blog/logistics/revolutionizing-logistics-case-studies-on-successful-ai-integration/"
+                            target="_blank"
+                            class="source-link"
+                        >
+                            <i class="fa-solid fa-external-link-alt"></i>
+                            Source: FreightAmigo
+                        </a>
+                    </div>
+
+                    <div class="capability-card fade-up delay-4">
+                        <div class="capability-icon">
+                            <i class="fa-solid fa-ship"></i>
+                        </div>
+                        <h3>Marine Logistics Co.</h3>
+                        <p
+                            style="
+                                color: var(--text-secondary);
+                                margin-bottom: 16px;
+                                font-size: 14px;
+                                line-height: 1.6;
+                            "
+                        >
+                            Implemented AI for documentation automation and
+                            customs clearance across 30+ origin countries.
+                            Reduced documentation errors by 75% and customs
+                            clearance time by 45%.
+                        </p>
+                        <div class="case-metric">
+                            <span class="metric-value">75%</span>
+                            <span class="metric-label"
+                                >Fewer Documentation Errors</span
+                            >
+                        </div>
+                        <a
+                            href="https://www.digital-adoption.com/ai-in-logistics-and-supply-chain-examples/"
+                            target="_blank"
+                            class="source-link"
+                        >
+                            <i class="fa-solid fa-external-link-alt"></i>
+                            Source: Digital Adoption
+                        </a>
+                    </div>
+
+                    <div class="capability-card fade-up delay-4">
+                        <div class="capability-icon">
+                            <i class="fa-solid fa-industry"></i>
+                        </div>
+                        <h3>Manufacturing Giant</h3>
+                        <p
+                            style="
+                                color: var(--text-secondary);
+                                margin-bottom: 16px;
+                                font-size: 14px;
+                                line-height: 1.6;
+                            "
+                        >
+                            Automotive parts manufacturer integrated AI agents
+                            for supplier communication and shipment tracking
+                            across 200+ suppliers. Improved supply chain
+                            visibility by 85% and reduced delays by 40%.
+                        </p>
+                        <div class="case-metric">
+                            <span class="metric-value">85%</span>
+                            <span class="metric-label"
+                                >Supply Chain Visibility</span
+                            >
+                        </div>
+                        <a
+                            href="https://www.mckinsey.com/capabilities/operations/our-insights/digital-logistics-technology-race-gathers-momentum"
+                            target="_blank"
+                            class="source-link"
+                        >
+                            <i class="fa-solid fa-external-link-alt"></i>
+                            Source: McKinsey
+                        </a>
+                    </div>
+                </div>
+                <p
+                    class="section-source"
+                    style="text-align: center; margin-top: 40px"
+                >
+                    Case studies compiled from industry reports by
+                    <a
+                        href="https://www.mckinsey.com/capabilities/operations/our-insights/digital-logistics-technology-race-gathers-momentum"
+                        target="_blank"
+                        >McKinsey</a
+                    >,
+                    <a
+                        href="https://www.chrobinson.com/en-us/about-us/newsroom/press-releases/2025/ai-performs-over-three-million-shipping-tasks/"
+                        target="_blank"
+                        >C.H. Robinson</a
+                    >,
+                    <a
+                        href="https://www.freightamigo.com/en/blog/logistics/revolutionizing-logistics-case-studies-on-successful-ai-integration/"
+                        target="_blank"
+                        >FreightAmigo</a
+                    >, and
+                    <a
+                        href="https://www.sphereinc.com/blogs/ai-in-logistics-and-transportation/"
+                        target="_blank"
+                        >Sphere Partners</a
+                    >.
+                </p>
+            </div>
+        </section>
+
+        <!-- Industry Quotes Section -->
+        <section id="quotes">
+            <div class="container">
+                <div class="fade-up">
+                    <div class="section-label">Industry Voices</div>
+                    <h2 class="section-title">What Leaders Are Saying</h2>
+                </div>
+
+                <div class="quotes-grid">
+                    <div class="quote-card fade-up delay-1">
+                        <div class="quote-icon">
+                            <i class="fa-solid fa-quote-left"></i>
+                        </div>
+                        <blockquote>
+                            "AI is no longer optional in logistics. Companies
+                            that haven't adopted are already falling behind. The
+                            competitive advantage goes to those who automate
+                            intelligently."
+                        </blockquote>
+                        <div class="quote-author">
+                            <div class="author-info">
+                                <span class="author-name">Michael Larsson</span>
+                                <span class="author-title"
+                                    >CEO, Digital Logistics Forum</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quote-card fade-up delay-2">
+                        <div class="quote-icon">
+                            <i class="fa-solid fa-quote-left"></i>
+                        </div>
+                        <blockquote>
+                            "We saw 15% cost reduction within the first quarter
+                            of implementing AI agents for freight auditing. The
+                            ROI was immediate and visible across our entire
+                            operation."
+                        </blockquote>
+                        <div class="quote-author">
+                            <div class="author-info">
+                                <span class="author-name">Sarah Chen</span>
+                                <span class="author-title"
+                                    >VP Operations, Global Freight
+                                    Solutions</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quote-card fade-up delay-3">
+                        <div class="quote-icon">
+                            <i class="fa-solid fa-quote-left"></i>
+                        </div>
+                        <blockquote>
+                            "The 4PL model thrives on data and speed. AI agents
+                            give us both. We're now processing tender responses
+                            10x faster with better analytical depth."
+                        </blockquote>
+                        <div class="quote-author">
+                            <div class="author-info">
+                                <span class="author-name">Marcus Weber</span>
+                                <span class="author-title"
+                                    >Managing Director, European 4PL
+                                    Provider</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quote-card fade-up delay-4">
+                        <div class="quote-icon">
+                            <i class="fa-solid fa-quote-left"></i>
+                        </div>
+                        <blockquote>
+                            "Control tower visibility transformed our
+                            operations. But adding AI predictive capabilities?
+                            That's when we truly became proactive rather than
+                            reactive."
+                        </blockquote>
+                        <div class="quote-author">
+                            <div class="author-info">
+                                <span class="author-name">Jennifer Park</span>
+                                <span class="author-title"
+                                    >Director of Supply Chain, Manufacturing
+                                    Corp</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section id="contact" class="cta-section">
+            <div class="cta-bg"></div>
+            <div class="cta-content fade-up">
+                <h2 class="cta-title">Ready to <span>Automate</span>?</h2>
+                <p class="cta-text">
+                    Companies with 20-50 active projects lose 20+ hours weekly
+                    to manual processes. Your competitors are already ahead.
+                    Don't get left behind.
+                </p>
+                <a
+                    href="/cdn-cgi/l/email-protection#d7a3a5b6bcbeaea4bcbe97b1a5b6b4a3b6bba4faa4b8bba2a3beb8b9a4f9b4b8ba"
+                    class="hero-cta"
+                >
+                    Let's Connect <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footer-logo">FRACTALS <span>AGENTS</span> © 2026</div>
+            <div class="footer-links">
+                <a href="#" class="footer-link">Privacy</a>
+                <a href="#" class="footer-link">Terms</a>
+                <a
+                    href="/cdn-cgi/l/email-protection#512523303a3828223a38113723303225303d227c223e3d2425383e3f227f323e3c"
+                    class="footer-link"
+                    >Contact</a
+                >
+            </div>
+        </footer>
+
+        <script
+            data-cfasync="false"
+            src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"
+        ></script>
+        <script>
+            // Scroll reveal animation
+            function reveal() {
+                const elements = document.querySelectorAll(".fade-up");
+                const windowHeight = window.innerHeight;
+
+                elements.forEach((el, index) => {
+                    const elementTop = el.getBoundingClientRect().top;
+                    const revealPoint = 150;
+
+                    if (elementTop < windowHeight - revealPoint) {
+                        el.classList.add("active");
+                    }
+                });
+            }
+
+            window.addEventListener("scroll", reveal);
+            window.addEventListener("load", reveal);
+            setTimeout(reveal, 100);
+
+            // Smooth scroll
+            document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+                anchor.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(
+                        this.getAttribute("href"),
+                    );
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: "smooth",
+                            block: "start",
+                        });
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>
